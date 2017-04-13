@@ -1,0 +1,19 @@
+{
+  "name": "contexter",
+  "version": "0.1.0",
+  "description": "Reactively extract all available data from files in a directory to one javascript object",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elingerojo/contexter.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/elingerojo/contexter/issues"
+  },
+  "homepage": "https://github.com/elingerojo/contexter#readme"
+}
