@@ -10,10 +10,18 @@
     "type": "git",
     "url": "git+https://github.com/elingerojo/contexter.git"
   },
-  "author": "",
+  "author": "Eduardo Martinez",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/elingerojo/contexter/issues"
   },
-  "homepage": "https://github.com/elingerojo/contexter#readme"
+  "homepage": "https://github.com/elingerojo/contexter#readme",
+  "dependencies": {
+    "chokidar": "^1.4.1",
+    "event-emitter": "^0.3.4",
+    "fs-extra": "^0.26.3",
+    "inflection": "^1.8.0",
+    "js-yaml": "^3.4.6",
+    "upath": "^0.2.0"
+  }
 }

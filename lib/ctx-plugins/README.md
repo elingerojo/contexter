@@ -2,7 +2,7 @@
 A plugin is a module that exports an object with functions to process a particular file type
 - `check()` - Function that calls back with a result indicating whether this plugin should process the given file
 - `parse()` - Function that interprets/extracts file data
-- `render()` - Function externally called by `express` server to answer a file `GET` HTTP request
+- `render()` - Function that could be externally called by `express` server to answer a file `GET` HTTP request
 - ... and some support data like `filetype` , `name` and `priority`
 
 ---
@@ -26,7 +26,8 @@ A plugin is a module that exports an object with functions to process a particul
 - **Mandatory**
 - Receives a `filename`. It is the full path to the file including name and extension
 - Returns a callback function with signature `(err, result) => {}`
-    - `result` is a `string` or `boolean` indicating whether the plugin should process the given file. `filename`. It is a string, it is evaluated as `true` and the string value is used as the target file extension when `render()` is available
+    - `result` is a `string` or `boolean` indicating whether the plugin should process the given file. `filename`. It is a string, it is evaluated as `true` and the string value is used as the target file extension that could be needed for other file process like `render()`
+
 
 - Example returning a `string` from `page.js`
 
@@ -77,7 +78,7 @@ A plugin is a module that exports an object with functions to process a particul
 
 - **Optional**
 - Receives a `file` object. It is the new instance of the `filetype` class that the plugin serves
-- Returns or not a callback with the signature  `(err, data) => {}`
+- Returns a callback with the signature  `(err, data) => {}`
     - `data` is the processed file data to be added to `context` object
 
 ---
@@ -85,12 +86,13 @@ A plugin is a module that exports an object with functions to process a particul
 ### render()
 
 
-- Example from `app-stylesheet.js`
+- Example for an application that process stylesheets `app-stylesheet.js`
 
 ```
   . . .
-  render: (file, context, callback) => {
-    let output
+  render (context, callback) {
+    const file = this
+    var output
 
     if (file.isCSS) {
       output = myth(file.input, {source: file.path.full})
@@ -134,25 +136,19 @@ A plugin is a module that exports an object with functions to process a particul
 ```
 
 - **Optional**
-- Receives a `file` object. It is the particular instance of  filetype class  to be rendered
 - Receives a `context` object. It is the only instance of the `Context` class that is available to the application. Sometimes referred as `context` or `ctx`
 - Returns a callback with the signature  `(err, output) => {}`
-    - `output` is the processed file data to be sent by `express` server in response to a `GET` HTTP request
-
-Note:
-- `routes.js` sets `express` server to render a file with different function signature `file.render(context, callback)`
-- `file.js` translates to plugin signature `render(file, context, callback)`
+    - `output` is the processed file data that could be used by `express` server in response to a `GET` HTTP request
 
 ---
 
 ### priority
 
-- Example from `app-layout.js`
+- Example for an application that process layouts `app-layout.js`
 
 ```
   . . .
-  // Defines "check(filename, ...)"s relative order
-  // (lower means, least priority) only relevant when loading plugins array
+  // Check precedence: higher first to lower last
   priority: 30,
   . . .
 ```
@@ -164,7 +160,7 @@ Note:
 
 ### filetype
 
-- Example from `app-script.js`
+- Example for an application that process javascript scripts `app-script.js`
 
 ```
   . . .
@@ -173,21 +169,21 @@ Note:
   . . .
 ```
 
-- **Optional**
-- String with the **exact** filetype the plugin serves. This is the first option to look for the plugin/filetype match.
+- **Mandatory**
+- String with the **exact** filetype the plugin serves
 
 ---
 
 ### name
 
-- Example from `app-stylesheet.js`
+- Example for an application that process html pages with handlebars templating `page-partials.js`
 
 ```
   . . .
-   // Used as the last failover to deduct file type class, just edit and uncomment
-   // name: "what-ever-text including the filetype class works",
+  // Not used, is just like a comment
+  name: "partials out of layouts v0.1",
   . . .
 ```
 
 - **Optional**
-- String which **includes** the filetype the plugin serves. This is the third failover option to look for the plugin/filetype match. The second failover option is the **plugin filename itself** by **including** the filetype the plugin serves
+- Not used, is just like a comment
