@@ -45,33 +45,33 @@ ctxr.watcher('path-to-dir')
 The result is a reactive `context` variable equivalent to:
 
     var context = {
-            "/": {
-                  assets: {
-                        "photo.jpg": {...},
-                        "style.css": {...},
-                        "posts.yml": {
-                              data: {foo: "bar", ...}, ...
-                        }},
-                  "index.html":  {...},
-                  "README.md":  {...},
-                  "notes.txt":  {...}
-                  },
-            datafiles: {
-                  "index.html":  {...}
-                  },
-            unknowns: {
-                  "photo.jpg": {...},
-                  "style.css": {...},
-                  "index.html":  {...},
-                  "README.md":  {...},
-                  "notes.txt":  {...}
-            }
-        }
+                  "/": {
+                        assets: {
+                              "photo.jpg": {...},
+                              "style.css": {...},
+                              "posts.yml": {
+                                    data: {foo: "bar", ...}, ...
+                              }},
+                        "index.html":  {...},
+                        "README.md":  {...},
+                        "notes.txt":  {...}
+                        },
+                  datafiles: [
+                        {...}   // index.html
+                        ],
+                  unknowns: [
+                        {...},  // photo.jpg
+                        {...},  // style.css
+                        {...},  // index.html
+                        {...},  // README.md
+                        {...}   // notes.txt
+                        ]
+                }
 
 - The directory structure is mirrored in property `"/"` with all files and it's data directly available
 - For extra convenience...
-    - All data files are **also** available in sibling property `datafiles`
-    - ...the rest of the files are **also** available on next sibling property `unknowns`
+    - All data files are **also** available as an array in sibling property `datafiles`
+    - ...the rest of the files are **also** available as an array on next sibling property `unknowns`
 
 #### Description
 
@@ -105,13 +105,13 @@ There are 2 configuration options
 - `config.reportInterval`: Number representing the interval milliseconds to report the remaining files to `context` be ready. Commonly used to keep the user informed that files are been processed. Affects `contexting` and `all` events. Default to  `0` (zero) meaning that reporting is disabled.
 - `config.pluginConfig`: Object with `plugin` configuration (see Advanced Methods below)
 
-`option`: Object with [chokidar](https://github.com/paulmillr/chokidar#api) options
+`options`: Object with [chokidar](https://github.com/paulmillr/chokidar#api) options
 
 The `context` object format and content can be custom redefined
 
-- Custom file types could be **extended** beyond the `datafile` default type (see Advanced Methods below)
+- Custom file **types** could be **extended** beyond the `datafile` default type, example: `images`, `stylesheets`,... (see Advanced Methods below)
 
-- Custom file processes could be **used** beyond data file `JSON` and `yaml` parse (see Advanced Methods below)
+- Custom file **processes** could be **used** beyond data file `JSON` and `yaml` parse, example: `render`, `write`,... (see Advanced Methods below)
 
 ## Getting started
 
@@ -194,13 +194,17 @@ The default `file` class has 3 types of methods
 `extend(filetypeName, filetype)`: Extends the File class to have other file types beyond `datafiles` or even modify the `context` object structure and format
 
   - filetypeName: String used as a reference for the `filetype` object inside plugins
-  - filetype: Object with methods that replace the some of the original `file` class methods
+  - filetype: Object with methods that replace the some of the original `file` class methods. Used to define de `context` format
 
-`use(plugin)`: Extend the File class to have other file process beyond data file `JSON` and `yaml` parse. Custom processes like `render()` and `write()`
+`use(plugin)`: Extend the File class to have other file process beyond data file `JSON` and `yaml` parse. Custom processes like `render` and `write`
 
 - `plugin`: Object with methods that replace some of the original `file` class methods
 
 See detail information [here](./lib/ctx-plugins/README.md)
+
+## Acknowledgements
+
+- [@zeke](https://www.npmjs.com/~zeke) Thanks for your code, time and inspiration
 
 ## License
 
