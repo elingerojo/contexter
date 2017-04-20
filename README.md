@@ -102,7 +102,7 @@ There are 2 configuration options
 2. For `.watcher(options)`
 
 `config`: Object with `Contexter` configuration
-- `config.reportDelay`: Number representing the interval milliseconds to report the remaining files to `context` be ready. Commonly used to keep the user informed that files are been processed. Affects `contexting` and `all` events. Default to  `0` (zero) meaning that reporting is disabled
+- `config.reportInterval`: Number representing the interval milliseconds to report the remaining files to `context` be ready. Commonly used to keep the user informed that files are been processed. Affects `contexting` and `all` events. Default to  `0` (zero) meaning that reporting is disabled.
 - `config.pluginConfig`: Object with `plugin` configuration (see Advanced Methods below)
 
 `option`: Object with [chokidar](https://github.com/paulmillr/chokidar#api) options
