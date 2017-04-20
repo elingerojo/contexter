@@ -115,6 +115,8 @@ The `context` object format and content can be custom redefined
 
 ## Getting started
 
+(You may prefer to test drive [contexter-cli](https://www.npmjs.com/package/contexter-cli), a sample application using `contexter` that easily can be used from command line)
+
 Install with npm:
 
     npm install contexter --save
