@@ -4,7 +4,7 @@
   "description": "Reactively extract all available data from files in a directory to one javascript object",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=test mocha --check-leaks --globals __core-js_shared__,index"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,15 @@
     "fs-extra": "^0.26.3",
     "inflection": "^1.8.0",
     "js-yaml": "^3.4.6",
+    "require-dir": "^0.3.1",
     "upath": "^0.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "cross-env": "^2.0.1",
+    "lodash": "^4.17.4",
+    "mocha": "^2.5.3",
+    "path-exists": "^2.1.0",
+    "tmp": "0.0.28"
   }
 }
