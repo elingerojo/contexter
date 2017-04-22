@@ -1,0 +1,116 @@
+<!--
+title: Antero Fotografía | Acerca de
+module-services:
+  module-title: Our Services
+  module-subtitle: A collectieson of textile samples lay spread out on the table – Samsa was a travelling salesman – and above it there hung a picture that he had recently cut.
+  imageURL: assets/images/notebooks.jpg
+  iconboxes: # !important. Should have 3 to 4 iconbox, no more, no less.
+  - icon: icon-mobile
+    iconbox-title: Responsive Design
+    iconbox-content: Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life.
+  - icon: icon-linegraph
+    iconbox-title: Modern Code
+    iconbox-content: Even two all-powerful Pointing has no control about the blind texts it is an almost unorthographic life.
+  - icon: icon-strategy
+    iconbox-title: Premium Plugins
+    iconbox-content: Even three all-powerful Pointing has no control about the blind texts it is an almost unorthographic life.
+  - icon: icon-layers
+    iconbox-title: Modular Layout
+    iconbox-content: Even four all-powerful Pointing has no control about the blind texts it is an almost unorthographic life.
+module-counters:
+  data-background: assets/images/module-5.jpg
+  counters: # !important. Should have 3 to 4 counter, no more, no less.
+  - icon: icon-trophy
+    data-to: 124
+    counter-content: Awards Won
+  - icon: icon-tools
+    data-to: 4221
+    counter-content: Lines of Code
+  - icon: icon-mobile
+    data-to: 15
+    counter-content: Themes Done
+  - icon: icon-pictures
+    data-to: 249
+    counter-content: Photos Made
+module-team:
+  module-title-line-1: Meet with
+  module-title-line-2: our creative team
+  module-subtitle: A collection of textile samples lay spread out on the table – Samsa was a travelling salesman – and above it there hung a picture that he had recently cut.
+  team-members:
+  - imageURL: assets/images/team-1.jpg
+    team-name: Martin Friman
+    team-role: Programmer
+  - imageURL: assets/images/team-2.jpg
+    team-name: Andy River
+    team-role: Creative Director
+  - imageURL: assets/images/team-3.jpg
+    team-name: Jim Stone
+    team-role: Art Director
+  - imageURL: assets/images/team-4.jpg
+    team-name: Dylan Woods
+    team-role: Account Manager
+module-testimonials:
+  module-title: Client reviews
+  testimonials:
+  - blockquote: When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove
+    avatarImageURL: https://s3.amazonaws.com/uifaces/faces/twitter/ryanbattles/128.jpg
+    name: John Doe
+  - blockquote: When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove
+    avatarImageURL: https://s3.amazonaws.com/uifaces/faces/twitter/draganbabic/128.jpg
+    name: Mark Stone
+module-clients:
+  module-title: Brands we use
+  module-subtitle: Only quality brands in all our works.
+  clients:
+  - logoURL: assets/images/logos/logo-1.png
+  - logoURL: assets/images/logos/logo-2.png
+  - logoURL: assets/images/logos/logo-3.png
+  - logoURL: assets/images/logos/logo-4.png
+  - logoURL: assets/images/logos/logo-5.png
+  - logoURL: assets/images/logos/logo-6.png
+  - logoURL: assets/images/logos/logo-7.png
+  - logoURL: assets/images/logos/logo-8.png
+-->
+	{{! SIDE BAR MENU }}
+	{{> sidebar page.sidebar}}
+
+	<!-- WRAPPER -->
+	<div class="wrapper">
+
+		<!-- HERO -->
+		<section id="hero" class="module-hero bg-dark-30 js-fullheight" data-background="assets/images/module-4.jpg">
+
+			<!-- HERO TEXT -->
+			<div class="hero-caption">
+				<div class="hero-text">
+					<h1 class="hero-title">Creative Agency</h1>
+					<p class="hero-subtitle font-serif m-t-40">A collection of textile samples lay spread out on the table – Samsa was a travelling<br> salesman – and above it there hung a picture that he had recently cut.</p>
+				</div>
+			</div>
+			<!-- /HERO TEXT -->
+
+		</section>
+		<!-- /HERO -->
+
+
+    {{!-- SERVICES --}}
+    {{> services-module page.module-services}}
+
+    {{!-- COUNTERS --}}
+    {{> counters-module page.module-counters}}
+
+    {{!-- TEAM --}}
+    {{> team-module page.module-team}}
+
+		<hr class="divider">
+
+    {{> testimonials-module page.module-testimonials}}
+
+    {{> clients-module page.module-clients}}
+		<hr class="divider">
+
+		{{! FOOTER }}
+		{{>footer page.footer}}
+
+	</div>
+	<!-- /WRAPPER -->
