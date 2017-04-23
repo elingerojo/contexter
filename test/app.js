@@ -88,9 +88,9 @@ describe('Contexter', function () {
       expect(context["/"].assets).to.be.an('object')
     })
 
-    it('has files that can be accessed by named key notation ( like `context["/"]["index.html"]` )', function(){
-      expect(context["/"]["index.html"]).to.be.an('object')
-      expect(context["/"]["index.html"].path.relative).to.equal('/index.html')
+    it('has files that can be accessed by named key notation', function(){
+      expect(context["/"].assets["posts.yml"]).to.be.an('object')
+      expect(context["/"].assets["posts.yml"].path.relative).to.equal('/assets/posts.yml')
     })
 
     it('has data extracted from a datafile nested in a subdir', function(){
@@ -128,14 +128,14 @@ describe('Contexter', function () {
       filenames = unknowns.map(f => f.path.relative)
     })
 
-    they('includes extensionless files like CNAME', function(){
-      expect(filenames).to.contain('/CNAME')
+    they('does NOT include extensionless files like CNAME', function(){
+      expect(filenames).to.not.contain('/CNAME')
     })
 
-    they('includes all non datafiles like `.md`, `.html`, `.jpg`, ...', function(){
-      expect(filenames).to.contain('/README.md')
-      expect(filenames).to.contain('/index.html')
-      expect(filenames).to.contain('/assets/photo.jpg')
+    they('does NOT include files with extensions like `.md`, `.html`, `.jpg`, ...', function(){
+      expect(filenames).to.not.contain('/README.md')
+      expect(filenames).to.not.contain('/index.html')
+      expect(filenames).to.not.contain('/assets/photo.jpg')
     })
   })
 

@@ -7,16 +7,19 @@ A plugin is a module that exports an object with functions to process a particul
 
 ---
 
-### check()
+### check() and watchExtensions
 
 - Example from `ctx-datafile.js`
 
 ```
   . . .
+  // Used to add watch file 'globs' patterns for watch optimization
+  watchExtensions: ['.json', '.yml', '.yaml'],
+
   // calls back with a result indicating whether this class should process the given file.
-  check: (filename, callback) => {
+  check (filename, callback) {
     const extension = path.extname(filename).toLowerCase()
-    const allowedExtensions = ['.json', '.yml', '.yaml']
+    const allowedExtensions = this.watchExtensions
 
     return callback(null, allowedExtensions.indexOf(extension) > -1)
   },
@@ -24,19 +27,24 @@ A plugin is a module that exports an object with functions to process a particul
 ```
 
 - **Mandatory**
-- Receives a `filename`. It is the full path to the file including name and extension
-- Returns a callback function with signature `(err, result) => {}`
-    - `result` is a `string` or `boolean` indicating whether the plugin should process the given file. `filename`. It is a string, it is evaluated as `true` and the string value is used as the target file extension that could be needed for other file process like `render()`
+- watchExtensions: Array with extensions to "narrow" (and optimize) the file watch
+- check(): Function to determine whether this class process a particular file
+    - Receives a `filename`. It is the full path to the file including name and extension
+    - Returns a callback function with signature `(err, result) => {}`
+        - `result` is a `string` or `boolean` indicating whether the plugin should process the given file. If is a string, it is evaluated as `true` and the string value is used as the target file extension that could be needed for other file process like `render()`
 
 
 - Example returning a `string` from `page.js`
 
 ```
   . . .
+  // Used to add watch file 'globs' patterns for watch optimization
+  watchExtensions: ['.html', '.md', '.mdown', '.markdown', '.handlebars', '.hbs'],
+
   // calls back with a result indicating whether this class should process the given file.
   check (filename, callback) {
     const extension = path.extname(filename).toLowerCase()
-    const allowedExtensions = ['.html', '.md', '.mdown', '.markdown', '.handlebars', '.hbs']
+    const allowedExtensions = this.watchExtensions
     let isFound = allowedExtensions.indexOf(extension) > -1
     return callback(null, isFound ? '.html' : false)
   },
