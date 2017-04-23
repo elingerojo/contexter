@@ -49,37 +49,27 @@ The result is a reactive `context` variable equivalent to:
     var context = {
                   "/": {
                         assets: {
-                              "photo.jpg": {...},
-                              "style.css": {...},
                               "posts.yml": {
                                     data: {foo: "bar", ...}, ...
-                              }},
-                        "index.html":  {...},
-                        "README.md":  {...},
-                        "notes.txt":  {...}
+                              }}
                         },
                   datafiles: [
-                        {...}   // index.html
+                        {...}   // posts.yml
                         ],
                   unknowns: [
-                        {...},  // photo.jpg
-                        {...},  // style.css
-                        {...},  // index.html
-                        {...},  // README.md
-                        {...}   // notes.txt
-                        ]
+                        ]      // empty
                 }
 
 - The directory structure is mirrored in property `"/"` with all files and it's data directly available
 - For extra convenience...
     - All data files are **also** available as an array in sibling property `datafiles`
-    - ...the rest of the files are **also** available as an array on next sibling property `unknowns`
+    - Files with extension like datafiles but not able to process them are available as an array on next sibling property `unknowns`
 
 #### Description
 
-There are two file types. Files with extensions `.json`, `.yml` and `.ymal` are `datafiles` type and the rest are `unknowns` type
+There are two file types. Files with extensions `.json`, `.yml` and `.ymal` are `datafiles` type and those that can not be processed are `unknowns` type
 
-Each file appears twice in `context` object
+Each datafile appears twice in `context` object
 
 1. Under the property `"/"` in the corresponding nested level according with the directory structure
 2. Under the corresponding file type property. Either `datafiles` or `unknowns`
