@@ -1,3 +1,5 @@
+[![travis-badge](https://travis-ci.org/elingerojo/contexter.svg?branch=master)](https://travis-ci.org/elingerojo/contexter)
+
 # contexter
 
 > Reactively extract all available data from files in a directory to one javascript object
