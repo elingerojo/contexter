@@ -60,10 +60,10 @@ The result is a reactive `context` variable equivalent to:
                         ]      // empty
                 }
 
-- The directory structure is mirrored in property `"/"` with all files and it's data directly available
+- The directory structure is mirrored in property `"/"` with all `datafiles` and it's data directly available
 - For extra convenience...
     - All data files are **also** available as an array in sibling property `datafiles`
-    - Files with extension like datafiles but not able to process them are available as an array on next sibling property `unknowns`
+    - Files with extension like data files but not able to process them are available as an array on next sibling property `unknowns`
 
 #### Description
 
@@ -93,11 +93,12 @@ There are 2 configuration options
 1. For `Contexter(config)`
 2. For `.watcher(options)`
 
-`config`: Object with `Contexter` configuration
+`config`: Object for `Contexter` configuration
 - `config.reportInterval`: Number representing the interval milliseconds to report the remaining files to `context` be ready. Commonly used to keep the user informed that files are been processed. Affects `contexting` and `all` events. Default to  `0` (zero) meaning that reporting is disabled.
+- `config.isWatchAll`: Boolean to set file watch mode. There are two mode: `true` for "dir path" and `false` for "glob optimized". The first one, watch for ALL files in the directory specified, the later one, optimize a `glob` to watch ONLY for files with their extensions stated in the plugins. Default to false, meaning: "glob optimized" to ONLY watch for a "narrow" set of files
 - `config.pluginConfig`: Object with `plugin` configuration (see Advanced Methods below)
 
-`options`: Object with [chokidar](https://github.com/paulmillr/chokidar#api) options
+`options`: Object for `.watcher `with [chokidar.watch()](https://github.com/paulmillr/chokidar#api) options
 
 The `context` object format and content can be custom redefined
 
@@ -107,11 +108,13 @@ The `context` object format and content can be custom redefined
 
 ## Getting started
 
-(You may prefer to test drive [contexter-cli](https://www.npmjs.com/package/contexter-cli), a sample application using `contexter` that easily can be used from command line)
+(You may prefer to test drive [contexter-cli](https://www.npmjs.com/package/contexter-cli), a sample application using `contexter` that can easily be used from command line)
 
 Install with npm:
 
-    npm install contexter --save
+```
+$ npm install contexter --save
+```
 
 Then `require` and use it in your code:
 

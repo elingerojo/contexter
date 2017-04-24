@@ -27,11 +27,11 @@ A plugin is a module that exports an object with functions to process a particul
 ```
 
 - **Mandatory**
-- watchExtensions: Array with extensions to "narrow" (and optimize) the file watch
 - check(): Function to determine whether this class process a particular file
     - Receives a `filename`. It is the full path to the file including name and extension
     - Returns a callback function with signature `(err, result) => {}`
         - `result` is a `string` or `boolean` indicating whether the plugin should process the given file. If is a string, it is evaluated as `true` and the string value is used as the target file extension that could be needed for other file process like `render()`
+- watchExtensions: Optional array with extensions to "narrow" (and optimize) the file watch. When absent, watch glob optimization does not occur and watch happens on all files in directory even for those that do not have a corresponding plugin (so then ending as `unknowns`)
 
 
 - Example returning a `string` from `page.js`
