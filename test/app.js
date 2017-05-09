@@ -141,7 +141,7 @@ describe('Contexter with config = {isWatchAll: true}', function () {
     })
   })
 
-  it("emits a 'ready' event with a context object that has a root property ( `context["/"]` ) ", function (done) {
+  it('emits a "ready" event with a context object that has a root property ( `context["/"]` ) ', function (done) {
 
     ctxr.watcher(sourceDir)
       .on('ready', (_context) => {
