@@ -1,18 +1,28 @@
 # Plugins API
-A plugin is a module that exports an object with functions to process a particular file type
+
+## Overview
+A plugin is a module that exports an **Object** with **functions** and **parameters** to process a particular file type (like `datafiles`, `images`, `stylesheets`, etc.)
+
+##### functions
+
 - `check()` - Function that calls back with a result indicating whether this plugin should process the given file
 - `parse()` - Function that interprets/extracts file data
-- `render()` - Function that could be externally called by `express` server to answer a file `GET` HTTP request
-- ... and some support data like `filetype` , `name` and `priority`
+- `render()` - Function that could be externally called to present file data (Ex. by `express` server to answer a file `GET` HTTP request directly)
 
----
+##### parameters
+
+- `filetype` - File type that the plugin serves
+- `priority` - To establish plugins precedence
+- `watchExtensions` - Array of possible handled extensions by plugin
+
+## Details by example
 
 ### check() and watchExtensions
 
-- Example from `ctx-datafile.js`
+Example from `ctx-datafile.js`
 
-```
-  . . .
+```js
+  ...
   // Used to add watch file 'globs' patterns for watch optimization
   watchExtensions: ['.json', '.yml', '.yaml'],
 
@@ -23,21 +33,25 @@ A plugin is a module that exports an object with functions to process a particul
 
     return callback(null, allowedExtensions.indexOf(extension) > -1)
   },
-  . . .
+  ...
 ```
 
-- **Mandatory**
-- check(): Function to determine whether this class process a particular file
-    - Receives a `filename`. It is the full path to the file including name and extension
+- `check(filename, callback(err, result))` _(Function)_ - Mandatory - The result of the function is used to determine whether the plugin should process a particular file or not
+
+    - Receives a `filename`. It is a full path to the file including name and extension
+
     - Returns a callback function with signature `(err, result) => {}`
-        - `result` is a `string` or `boolean` indicating whether the plugin should process the given file. If is a string, it is evaluated as `true` and the string value is used as the target file extension that could be needed for other file process like `render()`
-- watchExtensions: Optional array with extensions to "narrow" (and optimize) the file watch. When absent, watch glob optimization does not occur and watch happens on all files in directory even for those that do not have a corresponding plugin (so then ending as `unknowns`)
+
+        - `result` is a `String` or `Boolean` indicating whether the plugin should process the given file. If it is a `String`, it is evaluated as `true`, meaning that the plugin should process the file. And the string value will be used as the "target file extension" used by _write-like-process_ like `render()`. If it is a `Boolean` (and `true`), the original `filename` extension will be used as the "target file extension"
 
 
-- Example returning a `string` from `page.js`
+- `watchExtensions` _(Array)_ - Optional - array with extensions to "narrow" (and optimize) the file watch. When absent, watch glob optimization does not occur and watch happens on ALL files in directory even for those that do not have a corresponding plugin (so they will end unprocessed as `unknowns`)
 
-```
-  . . .
+
+Example returning a `String` (from plugin `ctx-page.js`, an application that process website pages, not present in `npm contexter` but shown for didactic purpose)
+
+```js
+  ...
   // Used to add watch file 'globs' patterns for watch optimization
   watchExtensions: ['.html', '.md', '.mdown', '.markdown', '.handlebars', '.hbs'],
 
@@ -46,20 +60,21 @@ A plugin is a module that exports an object with functions to process a particul
     const extension = path.extname(filename).toLowerCase()
     const allowedExtensions = this.watchExtensions
     let isFound = allowedExtensions.indexOf(extension) > -1
+    // if original file extension is in the list, the `render()` output should be '.html'
     return callback(null, isFound ? '.html' : false)
   },
-  . . .
+  ...
 ```
 
 ---
 
 ### parse()
 
-- Example from `ctx-datafile.js`
+Example from `ctx-datafile.js`
 
-```
-  . . .
-  parse: (file, callback) => {
+```js
+  ...
+  parse (file, callback) {
     var data = null
 
     function isJSON () {
@@ -81,22 +96,32 @@ A plugin is a module that exports an object with functions to process a particul
 
     return callback(null, data)
   }
-  . . .
+  ...
 ```
 
-- **Optional**
-- Receives a `file` object. It is the new instance of the `filetype` class that the plugin serves
-- Returns a callback with the signature  `(err, data) => {}`
-    - `data` is the processed file data to be added to `context` object
+- `parse (file, callback(err, data))` _(Function)_ - Optional - The data of the call back function is added to the `context` object in the property (and level) that the `filetype` defines (see Filetypes API)
+
+    - Receives a `file` object. It is an instance of the `filetype` class that the plugin serves
+
+    - Returns a callback with the signature  `function (err, data) {}`
+
+        - `data` is the processed file data to be added to `context` object
 
 ---
 
 ### render()
 
 
-- Example for an application that process stylesheets `app-stylesheet.js`
+- Example from an application that process stylesheets (plugin `app-stylesheet.js` not present in `npm contexter` but shown for didactic purpose)
 
-```
+
+
+```js
+const myth            = require('myth')
+const less            = require('less')
+const sass            = require('node-sass')
+const stylus          = require('stylus')
+
   . . .
   render (context, callback) {
     const file = this
@@ -143,55 +168,38 @@ A plugin is a module that exports an object with functions to process a particul
   . . .
 ```
 
-- **Optional**
-- Receives a `context` object. It is the only instance of the `Context` class that is available to the application. Sometimes referred as `context` or `ctx`
-- Returns a callback with the signature  `(err, output) => {}`
-    - `output` is the processed file data that could be used by `express` server in response to a `GET` HTTP request
+- `render (file, callback(err, output))` _(Function)_ - Optional - The `output` of the call back function is the processed file data for final presentation
+
+    - Receives a `file` object. It is an instance of the `filetype` class that the plugin serves
+
+    - Returns a callback with the signature  `function (err, output) {}`
+
+        - `output` is the processed file data for final presentation (that could be used by `express` server in response to a `GET` HTTP request)
 
 ---
 
 ### priority
 
-- Example for an application that process layouts `app-layout.js`
-
-```
+```js
   . . .
   // Check precedence: higher first to lower last
   priority: 30,
   . . .
 ```
 
-- **Optional**
-- Number used to define the `check()` function precedence between plugins when conflicting plugins are present. Conflicting means, an overlap of the filetypes they serve.
+- `priority` _(Number)_ - Optional - It is used to define the `check()` function precedence between plugins when conflicting plugins are present. Conflicting means, an overlap of the filetypes they serve.
 
 ---
 
 ### filetype
 
-- Example for an application that process javascript scripts `app-script.js`
+Example from a plugin that serves `script` file types (not present in `npm contexter` but shown for didactic purpose)
 
-```
+```js
   . . .
-  // Optional because filetype could be assigned by filename or name attribute above
+  // Mandatory string with the name of the file type the plugin serves
   filetype: 'script',
   . . .
 ```
 
-- **Mandatory**
-- String with the **exact** filetype the plugin serves
-
----
-
-### name
-
-- Example for an application that process html pages with handlebars templating `page-partials.js`
-
-```
-  . . .
-  // Not used, is just like a comment
-  name: "partials out of layouts v0.1",
-  . . .
-```
-
-- **Optional**
-- Not used, is just like a comment
+- `filetype` _(String)_ - Mandatory - **exact** filetype name that the plugin serves
