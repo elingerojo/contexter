@@ -19,14 +19,14 @@ A plugin is a module that exports an **Object** with **functions** and **paramet
 
 ### check() and watchExtensions
 
-Example from `ctx-datafile.js`
+Example from `default-datafile-plugin.js`
 
 ```js
   ...
   // Used to add watch file 'globs' patterns for watch optimization
   watchExtensions: ['.json', '.yml', '.yaml'],
 
-  // calls back with a result indicating whether this class should process the given file.
+  // calls back with result indicating whether plugin should process file.
   check (filename, callback) {
     const extension = path.extname(filename).toLowerCase()
     const allowedExtensions = this.watchExtensions
@@ -48,7 +48,7 @@ Example from `ctx-datafile.js`
 - `watchExtensions` _(Array)_ - Optional - array with extensions to "narrow" (and optimize) the file watch. When absent, watch glob optimization does not occur and watch happens on ALL files in directory even for those that do not have a corresponding plugin (so they will end unprocessed as `unknowns`)
 
 
-Example returning a `String` (from plugin `ctx-page.js`, an application that process website pages, not present in `npm contexter` but shown for didactic purpose)
+Example returning a `String` (from plugin `default-page-plugin.js`, an application that process website pages, not present in `npm contexter` but shown for didactic purpose)
 
 ```js
   ...
@@ -66,11 +66,13 @@ Example returning a `String` (from plugin `ctx-page.js`, an application that pro
   ...
 ```
 
+Explanation: If the filename provided has any of the `watchExtensions` it will be considered found so `isFound` will be `true`. The callback will send a "result" depending on `isFound`, in this case, "result" will be `.html` meaning that any write-like-process process like `render()` or even a simple write, will use the target `.html` extension (because the plugin author intention is to "render" all those extensions into HTML)
+
 ---
 
 ### parse()
 
-Example from `ctx-datafile.js`
+Example from `default-datafile-plugin.js`
 
 ```js
   ...
@@ -112,7 +114,7 @@ Example from `ctx-datafile.js`
 ### render()
 
 
-- Example from an application that process stylesheets (plugin `app-stylesheet.js` not present in `npm contexter` but shown for didactic purpose)
+- Example from an application that process stylesheets (plugin `multy-stylesheet-plugin.js` not present in `npm contexter` but shown for didactic purpose)
 
 
 
