@@ -70,6 +70,12 @@ describe('Contexter without config', function () {
       expect(context.fixtures.assets).to.be.an('object')
     })
 
+    it('does NOT have a subdir named `node_modules` because was ignored by default', function () {
+      var dummyModule = __dirname + '/fixtures/node_modules/dummy-module.js'
+      expect(exists(dummyModule)).to.be.true
+      expect(context.fixtures["node_modules"]).to.not.exist
+    })
+
     it('has files that can be accessed by named key notation', function(){
       expect(context.fixtures.assets["posts.yml"]).to.be.an('object')
       expect(context.fixtures.assets["posts.yml"].path.relative).to.equal('/assets/posts.yml')
@@ -278,6 +284,7 @@ describe('Contexter.watcher with ignores', function () {
         expect(context).to.be.an('object')
         expect(context.fixtures).to.be.an('object')
         expect(context.fixtures.assets).to.not.exist
+        expect(context.fixtures['node_modules']).to.exist
         done()
       })
   })
