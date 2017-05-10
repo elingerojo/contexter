@@ -9,7 +9,9 @@
 
 Contexter reactively builds a context object from the data and metadata available in files in a directory for easy manipulation. It mirrors the directory structure and selectively extracts data depending on file type. Watches for any change in directory to keep the javascript object continuously updated
 
-(You may prefer to test drive `contexter` with [contexter-cli](https://www.npmjs.com/package/contexter-cli) sample application that can easily be used from command line)
+It's functionality could be extended by plugins
+
+(You may prefer to start a `contexter` test drive with [contexter-cli](https://www.npmjs.com/package/contexter-cli) sample application)
 
 ## Usage
 
@@ -34,7 +36,7 @@ var ctxr = new Contexter();
 
 ctxr.watcher('./dir')
   .on('ready', function (context) {
-    console.log( context['/'].assets['posts.yml'].data.foo );
+    console.log( context.dir.assets['posts.yml'].data.foo );
   });
 ```
 
@@ -50,7 +52,7 @@ The result is a reactive `context` variable equivalent to:
 
 ```js
 var context = {
-              "/": {
+              dir: {
                     assets: {
                           "posts.yml": {
                                 data: {foo: "bar", ...}, ...
@@ -64,7 +66,7 @@ var context = {
             }
 ```
 
-- The directory structure is mirrored in property `"/"` with all data files, it's data and metadata directly available
+- The directory structure is mirrored in property `dir` with all data files, it's data and metadata directly available
 - For extra convenience...
     - All data files are **also** available as an array in sibling property `datafiles`
     - Files with extension like data files but not able to be processed, are available in an array in next sibling property `unknowns`
@@ -75,7 +77,7 @@ There are two file types. Files with extensions `.json`, `.yml` and `.ymal` are 
 
 Each datafile appears twice in `context` object
 
-1. Under the property `"/"` in the corresponding nested level according with the directory structure
+1. Under the property `dir` in the corresponding nested level according with the directory structure
 2. Under the corresponding file type property. Either `datafiles` or `unknowns`
 
 In the `context` object, a `file` is represented by a property named after the filename including the extension. For example: file `posts.yml` is the property `"posts.yml"` of the object `assets`
@@ -84,7 +86,7 @@ The `file` value is an object that contains a property (among others) named `dat
 
 This `file` object also has other properties representing **metadata** about the file, properties like `path` and `stats`
 
-`.data` properties samples:
+`file` properties samples:
 
 - `.path.full`: Full path file
 - `.path.relative`: file path relative to directory provided
@@ -113,7 +115,7 @@ The `context` object format and content can be custom redefined
 
 - Custom file **types** could be **extended** beyond the `datafile` default type, example: `image`, `stylesheet`,... (see Advanced Methods below)
 
-- Custom file **processes** could be **used** beyond data file `JSON` and `yaml` parse, example: `render` or other parsers (see Advanced Methods below)
+- Custom file **processes** could be **used** beyond data file `JSON` and `yaml` parse, example: other parsers and renders (see Advanced Methods below)
 
 ## Getting started
 
@@ -154,7 +156,7 @@ sentinel
 
 ```
 
-(You may prefer to test drive `contexter` with [contexter-cli](https://www.npmjs.com/package/contexter-cli) sample application that can easily be used from command line)
+(You may prefer to start a `contexter` test drive with [contexter-cli](https://www.npmjs.com/package/contexter-cli) sample application)
 
 ## API
 
@@ -163,15 +165,13 @@ sentinel
 - `isWatchAll`: Flag to watch all files. Default to not watch all (`false` means, optimize)
 - `pluginConfig`: Object with global plugin's configuration
     - `pluginConfig.targetDir`: Full directory path where file should be render or written
-    - `pluginConfig.root`: String to replace the default `'/'` (see notice below example)
 
 example:
 ```js
 var Contexter = require('contexter');
 
 var ctxr = new Contexter({
-  reportInterval: 2000, // Report remaining files every 2 sec. until all are contexted
-  pluginConfig: {root: 'dir'} // Change to better root key name
+  reportInterval: 2000 // Report remaining files every 2 sec. until all are contexted
 });
 
 ctxr.watcher('./dir')
@@ -179,8 +179,6 @@ ctxr.watcher('./dir')
     console.log( context.dir.assets['posts.yml'].data.foo );
   });
 ```
-
-Notice: `.root` will be deprecated toward similar interface one level up outside `pluginConfig` object in future releases
 
 `ctxr.watcher(path, [options])`
 

@@ -1,6 +1,6 @@
 ### Default structure (of `context` object)
 
-The `context` object has the following default structure:
+The `context` object has the following default structure when extended by plugins:
 
 - &lt;root&gt;
 - &lt;filetypes-1&gt;
@@ -9,7 +9,7 @@ The `context` object has the following default structure:
 - &lt;filetypes-n&gt;
 - unknowns
 
-&lt;root&gt; name is configurable so it can be any word or phrase in a string (in the example is the directory name "dir")
+&lt;root&gt; name is the last directory name in the path provided
 
 Equivalent example:
 
@@ -34,7 +34,7 @@ These "branch" structures have other "branches" that have terminal "leafs" (prop
 So, in other words, the &lt;root&gt; has three parts:
 
 1. The directory tree structure "branches"
-2. `filenames` property "leafs"
+2. `filename` property "leafs"
 3. `file` objects values of the "leafs" that are another tree-like structures by they own (as defined by corresponding `plugin`)
 
 For example:
@@ -59,7 +59,7 @@ The number of &lt;filetypes&gt; keys (arrays) correspond to the number of `filet
 
 ### "contextualizing" overview
 
-> At the end, file data (and metadata) is represented in a `file` object at some deep level inside `context` object
+> ...at the end, file data (and metadata) is represented in a `file` object at some deep level inside `context` object
 
 `npm contexter` provides a framework to build configurable `file`s objects that represent the data (and metadata) that we want to extract from the directory files **and it's relation to other files**
 
@@ -67,14 +67,14 @@ The number of &lt;filetypes&gt; keys (arrays) correspond to the number of `filet
 
 An example step of "contextualizing" a file could be creating a property named `localImages` inside a HTML `file`. The property could contain an array with all the `image`s that are in the same directory as the HTML file
 
-This array sets a relation between `file`s (images and the HTML file).
+This array represents a relation between `file`s (images and the HTML file)
 
 With this array, it will be easy to "pull out" and use all "local images" metadata like this:
 
 ```js
 var actualHeightRequired = 0 // Initialize accumulator to zero pixels
 
-context.dir.subdir['index.html'].localImages.forEach( function (img) {
+context.dir.subdir['gallery.html'].localImages.forEach( function (img) {
   // Add the height metadata of each image
   actualHeightRequired = actualHeightRequired + img.data.dimension.height
 })
@@ -82,17 +82,15 @@ context.dir.subdir['index.html'].localImages.forEach( function (img) {
 
 This example shows the **usage** easiness, not the actual "contextualizing recipe" required to populate the `localImages` array
 
-> "contextualizing recipe" are the steps performed to build the `file` object with the content and format defined by the application author
-
-The "contextualizing recipe" is built with a **configurable** `file`
+> "contextualizing recipe" are the steps performed to build the `file` object relation with other files defined by the application author
 
 ### Configurable `file` overview
 
 Configurable `file` means that you 'pick and choose' what goes or not inside. This concept is an opinionated manifestation of a general `virtual file` concept where the `file` JavaScript object is the representation of a physical directory file. Opinionated because, as a framework, it has core methods already chosen and a particular sequence mechanism to easy the configuration burden
 
-> Each `plugin` is a `file` factory of a particular `filetype`
+> Each `plugin` is a `file` class factory of a particular `filetype`
 
-Each time `npm contexter` finds a new physical directory file, it search for a corresponding `plugin` to create a `file` with the data (and metadata)
+Each time `npm contexter` finds a new physical directory file, it searches for a corresponding `plugin` to create a `file` with some file relations, the data (and metadata)
 
 ### `npm contexter` internal workflow
 
@@ -153,10 +151,7 @@ The sequence is always the same, 1-2-3:
 
 3. **Cook** - Process the physical directory file
 
-    - Extract info about the physical directory file
-        - `setStats()` - Obtain the file system stats for the file
-
-        - `getContent()` - Get the file content and parse it
+    - Extract info about the physical directory file with `getContent()` - Get the file content and parse it
 
     - Run the `file`'s "contextualize recipe"
 
