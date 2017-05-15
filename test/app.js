@@ -3,15 +3,12 @@
 const exists    = require('path-exists').sync
 const expect    = require('chai').expect
 const path      = require('upath')
-const tmp       = require('tmp')
 const uniq      = require('lodash').uniq
 const Contexter = require('../lib/index')
 
 const they      = it
-const test      = it
 
 const sourceDir = path.join(__dirname, 'fixtures')
-const targetDir = path.normalize(tmp.dirSync().name)
 
 describe('Contexter without config', function () {
   var ctxr

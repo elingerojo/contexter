@@ -31,7 +31,6 @@
     "image-size": "^0.5.2",
     "lodash": "^4.17.4",
     "mocha": "^2.5.3",
-    "path-exists": "^2.1.0",
-    "tmp": "0.0.28"
+    "path-exists": "^2.1.0"
   }
 }
