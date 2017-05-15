@@ -1,6 +1,6 @@
 {
   "name": "contexter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reactively extract all available data from files in a directory to one javascript object",
   "main": "lib/index.js",
   "scripts": {
